@@ -3,6 +3,7 @@ package com.example.OrdenDeCompra2.model;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table ( name = "orden de compra") 
 public class OrdenCompra {
 
     private Long idOrden;

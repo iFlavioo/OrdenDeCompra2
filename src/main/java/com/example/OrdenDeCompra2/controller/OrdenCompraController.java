@@ -15,7 +15,7 @@ import com.example.OrdenDeCompra2.model.OrdenCompra;
 import com.example.OrdenDeCompra2.service.OrdenCompraService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/orden")
 public class OrdenCompraController {
     @Autowired
     private OrdenCompraService ordenService;

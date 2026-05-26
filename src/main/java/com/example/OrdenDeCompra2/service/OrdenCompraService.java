@@ -5,20 +5,42 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.OrdenDeCompra2.model.OrdenCompra;
+import com.example.OrdenDeCompra2.model.ProveedorDTO;
 import com.example.OrdenDeCompra2.repository.OrdenCompraRepository;
 
 @Service
 public class OrdenCompraService {
     @Autowired
     private OrdenCompraRepository ordenRepository;
-    public void crearOrden(OrdenCompra orden) {
-        orden.setFechaOrden(new Date());
-        orden.setEstado("PENDIENTE");
-        ordenRepository.save(orden);
-    }
 
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    public void crearOrden(OrdenCompra orden) {
+
+        String urlProveedor = "http://localhost:8097/proveedores/" + orden.getProveedorId();
+        
+        try {
+                        ProveedorDTO proveedor = restTemplate.getForObject(urlProveedor, ProveedorDTO.class);
+            
+            if (proveedor == null) {
+                throw new RuntimeException("El proveedor con ID " + orden.getProveedorId() + " no existe.");
+            }
+            
+
+            orden.setIdOrden(null);
+            
+            
+            ordenRepository.save(orden);
+            
+        } catch (Exception e) {
+            throw new RuntimeException("No se pudo crear la orden. Detalles: " + e.getMessage());
+        }
+    }
     
     public void cancelarOrden(Long idOrden) {
         Optional<OrdenCompra> ordenOpt = ordenRepository.findById(idOrden);
